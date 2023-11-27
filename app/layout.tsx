@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import './globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
+import { Providers } from '@/components/Providers';
+import { cn } from '@/lib/utils';
 
 const font = Open_Sans({ subsets: ['latin'] });
 
@@ -15,8 +18,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
-      <body className={font.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang='en' suppressHydrationWarning>
+        <body
+          className={cn(
+            font.className,
+            'min-h-screen font-sans antialiased bg-white dark:bg-[#313338]'
+          )}
+        >
+          <Providers
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem
+            storageKey='discord-theme'
+          >
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
