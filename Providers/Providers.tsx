@@ -6,6 +6,7 @@ import { type ThemeProviderProps } from 'next-themes/dist/types';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
+import { ModalProvider } from './modal-provider';
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   //   const queryClient = new QueryClient();
@@ -14,6 +15,7 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
     <NextThemesProvider {...props}>
       <TooltipProvider>
         <Toaster />
+        <ModalProvider />
         {children}
       </TooltipProvider>
     </NextThemesProvider>
