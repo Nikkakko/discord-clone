@@ -37,7 +37,7 @@ async function InviteCodePage({ params: { inviteCode } }: InviteCodePageProps) {
     return redirect(`/servers/${existingServer.id}`);
   }
 
-  const server = db.server.update({
+  const server = await db.server.update({
     where: {
       inviteCode,
     },
@@ -51,7 +51,12 @@ async function InviteCodePage({ params: { inviteCode } }: InviteCodePageProps) {
       },
     },
   });
-  return <div>InviteCode</div>;
+
+  if (server) {
+    return redirect(`/servers/${server.id}`);
+  }
+
+  return null;
 }
 
 export default InviteCodePage;

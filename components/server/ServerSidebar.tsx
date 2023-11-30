@@ -33,7 +33,7 @@ const ServerSidebar: React.FC<ServerSidebarProps> = async ({ serverId }) => {
         },
 
         orderBy: {
-          role: 'desc',
+          role: 'asc',
         },
       },
     },

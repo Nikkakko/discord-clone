@@ -34,7 +34,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='focus:outline-none ' asChild>
-        <button className='w-full text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition'>
+        <button className='w-full text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition capitalize'>
           {server.name}
 
           <ChevronDown className='w-5 h-5 ml-auto' />
@@ -51,19 +51,28 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className='px-3 py-2 text-sm cursor-pointer'>
+          <DropdownMenuItem
+            className='px-3 py-2 text-sm cursor-pointer'
+            onClick={() => openModal('editServer', { server })}
+          >
             Server Settings
             <Settings className='w-4 h-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className='px-3 py-2 text-sm cursor-pointer'>
+          <DropdownMenuItem
+            className='px-3 py-2 text-sm cursor-pointer'
+            onClick={() => openModal('members', { server })}
+          >
             Manage Members
             <Users className='w-4 h-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isModerator && (
-          <DropdownMenuItem className='px-3 py-2 text-sm cursor-pointer'>
+          <DropdownMenuItem
+            className='px-3 py-2 text-sm cursor-pointer'
+            onClick={() => openModal('createChannel', { server })}
+          >
             Create Channel
             <PlusCircle className='w-4 h-4 ml-auto' />
           </DropdownMenuItem>
