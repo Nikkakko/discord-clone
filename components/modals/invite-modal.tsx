@@ -81,6 +81,7 @@ const InviteModal: React.FC<InviteProps> = ({}) => {
             <Input
               className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
               value={inviteUrl}
+              readOnly
             />
             <Button size='icon' onClick={onCopy} disabled={isLoading}>
               {copied ? (
