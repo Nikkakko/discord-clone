@@ -11,8 +11,6 @@ export async function POST(req: Request) {
     const { name, type } = await req.json();
     const serverId = searchParams.get('serverId');
 
-    console.log(serverId, searchParams);
-
     if (!profile) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
