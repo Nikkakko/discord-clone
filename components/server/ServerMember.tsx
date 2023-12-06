@@ -32,8 +32,13 @@ const ServerMember: React.FC<ServerMemberProps> = ({ member, server }) => {
 
   const icon = roleIconMap[member.role];
 
+  const onClick = () => {
+    router.push(`/servers/${params?.serverId}/conversations/${member?.id}`);
+  };
+
   return (
     <button
+      onClick={onClick}
       className={cn(
         'group px-2 py-2 rounded-md flex items-center gap-x-1 w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition mb-1',
         params.channelId === member?.id ? 'bg-zinc-100 dark:bg-zinc-700' : ''
@@ -48,7 +53,7 @@ const ServerMember: React.FC<ServerMemberProps> = ({ member, server }) => {
       <span
         className={cn(
           'text-sm font-semibold text-zinc-500 dark:text-zinc-400 truncate',
-          params.channelId === member?.id ? 'text-zinc-900' : ''
+          params.memberId === member?.id ? 'text-zinc-900' : ''
         )}
       >
         {member.profile.name}
