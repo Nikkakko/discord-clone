@@ -29,7 +29,7 @@ interface ServerHeaderProps {
 const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
   const isAdmin = role === MemberRole.ADMIN;
   const isModerator = isAdmin || role === MemberRole.MODERATOR;
-  const { openModal } = useModalStore();
+  const { onOpen } = useModalStore();
 
   return (
     <DropdownMenu>
@@ -44,7 +44,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
         {isModerator && (
           <DropdownMenuItem
             className='text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer'
-            onClick={() => openModal('invite', { server })}
+            onClick={() => onOpen('invite', { server })}
           >
             Invite People
             <UserPlus className='w-4 h-4 ml-auto' />
@@ -53,7 +53,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
         {isAdmin && (
           <DropdownMenuItem
             className='px-3 py-2 text-sm cursor-pointer'
-            onClick={() => openModal('editServer', { server })}
+            onClick={() => onOpen('editServer', { server })}
           >
             Server Settings
             <Settings className='w-4 h-4 ml-auto' />
@@ -62,7 +62,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
         {isAdmin && (
           <DropdownMenuItem
             className='px-3 py-2 text-sm cursor-pointer'
-            onClick={() => openModal('members', { server })}
+            onClick={() => onOpen('members', { server })}
           >
             Manage Members
             <Users className='w-4 h-4 ml-auto' />
@@ -71,7 +71,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
         {isModerator && (
           <DropdownMenuItem
             className='px-3 py-2 text-sm cursor-pointer'
-            onClick={() => openModal('createChannel', { server })}
+            onClick={() => onOpen('createChannel', { server })}
           >
             Create Channel
             <PlusCircle className='w-4 h-4 ml-auto' />
@@ -81,7 +81,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
         {isAdmin && (
           <DropdownMenuItem
             className='text-rose-500 px-3 py-2 text-sm cursor-pointer'
-            onClick={() => openModal('deleteServer', { server })}
+            onClick={() => onOpen('deleteServer', { server })}
           >
             Delete Server
             <Trash className='w-4 h-4 ml-auto' />
@@ -90,7 +90,7 @@ const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
         {!isAdmin && (
           <DropdownMenuItem
             className='text-rose-500 px-3 py-2 text-sm cursor-pointer'
-            onClick={() => openModal('leaveServer', { server })}
+            onClick={() => onOpen('leaveServer', { server })}
           >
             Leave Server
             <LogOut className='w-4 h-4 ml-auto' />

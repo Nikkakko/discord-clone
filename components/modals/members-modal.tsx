@@ -42,7 +42,7 @@ interface MembersModalProps {}
 
 const MembersModal: React.FC<MembersModalProps> = ({}) => {
   const { toast } = useToast();
-  const { isOpen, onClose, type, data, openModal } = useModalStore();
+  const { isOpen, onClose, type, data, onOpen } = useModalStore();
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
   const { server } = data as { server: ServerWithMembersWithProfiles };
   const router = useRouter();
@@ -73,7 +73,7 @@ const MembersModal: React.FC<MembersModalProps> = ({}) => {
         });
 
         router.refresh();
-        openModal('members', { server: res.data });
+        onOpen('members', { server: res.data });
       }
     } catch (error) {
       console.log(error);
@@ -105,7 +105,7 @@ const MembersModal: React.FC<MembersModalProps> = ({}) => {
         });
 
         router.refresh();
-        openModal('members', { server: res.data });
+        onOpen('members', { server: res.data });
       }
     } catch (error) {
       console.log(error);

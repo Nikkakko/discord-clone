@@ -21,7 +21,7 @@ interface InviteProps {}
 
 const InviteModal: React.FC<InviteProps> = ({}) => {
   const { toast } = useToast();
-  const { isOpen, onClose, type, data, openModal } = useModalStore();
+  const { isOpen, onClose, type, data, onOpen } = useModalStore();
   const [copied, setCopied] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const { server } = data;
@@ -53,7 +53,7 @@ const InviteModal: React.FC<InviteProps> = ({}) => {
         title: 'New invite link generated',
         description: 'You can now send the invite link to your friends.',
       });
-      openModal('invite', { server: data });
+      onOpen('invite', { server: data });
     } catch (error) {
       console.log(error);
       toast({
