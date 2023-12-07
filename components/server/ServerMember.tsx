@@ -15,7 +15,7 @@ import UserAvatar from '../UserAvatar';
 
 interface ServerMemberProps {
   member: Member & { profile: Profile };
-  server?: Server;
+  server: Server;
 }
 
 const roleIconMap = {
@@ -33,7 +33,7 @@ const ServerMember: React.FC<ServerMemberProps> = ({ member, server }) => {
   const icon = roleIconMap[member.role];
 
   const onClick = () => {
-    router.push(`/servers/${params?.serverId}/conversations/${member?.id}`);
+    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
   };
 
   return (
