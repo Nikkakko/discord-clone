@@ -5,10 +5,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
 import { Input } from '../ui/input';
-import { Plus, Smile } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import axios from 'axios';
 import qs from 'query-string';
 import { useModalStore } from '@/hooks/use-modal-store';
+import EmojiPicker from '@/components/EmojiPicker';
+import { useRouter } from 'next/navigation';
 
 interface ChatInputProps {
   apiUrl: string;
@@ -25,6 +27,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
   const { onOpen } = useModalStore();
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,6 +44,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
       });
 
       await axios.post(url, values);
+      form.reset();
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +86,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
                     />
 
                     <div className='absolute top-7 right-8'>
-                      <Smile />
+                      <EmojiPicker
+                        onChange={emoji =>
+                          field.onChange(`${field.value} ${emoji}`)
+                        }
+                      />
                     </div>
                   </div>
                 </FormControl>
