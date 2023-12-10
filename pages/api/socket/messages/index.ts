@@ -1,14 +1,15 @@
+import { NextApiRequest } from 'next';
+
+import { NextApiResponseServerIo } from '@/types';
 import { currentProfilePages } from '@/lib/current-profile-pages';
 import { db } from '@/lib/db';
-import { NextApiResponseServerIo } from '@/types';
-import { NextApiRequest } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIo
 ) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
@@ -17,11 +18,19 @@ export default async function handler(
     const { serverId, channelId } = req.query;
 
     if (!profile) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    if (!serverId || !channelId) {
-      return res.status(400).json({ message: 'Bad request' });
+    if (!serverId) {
+      return res.status(400).json({ error: 'Server ID missing' });
+    }
+
+    if (!channelId) {
+      return res.status(400).json({ error: 'Channel ID missing' });
+    }
+
+    if (!content) {
+      return res.status(400).json({ error: 'Content missing' });
     }
 
     const server = await db.server.findFirst({
@@ -33,7 +42,6 @@ export default async function handler(
           },
         },
       },
-
       include: {
         members: true,
       },
@@ -46,7 +54,7 @@ export default async function handler(
     const channel = await db.channel.findFirst({
       where: {
         id: channelId as string,
-        serverId: server.id,
+        serverId: serverId as string,
       },
     });
 
@@ -59,20 +67,19 @@ export default async function handler(
     );
 
     if (!member) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(404).json({ message: 'Member not found' });
     }
 
     const message = await db.message.create({
       data: {
         content,
         fileUrl,
+        channelId: channelId as string,
         memberId: member.id,
-        channelId: channel.id,
       },
-
       include: {
         member: {
-          select: {
+          include: {
             profile: true,
           },
         },
@@ -83,9 +90,9 @@ export default async function handler(
 
     res?.socket?.server?.io?.emit(channelKey, message);
 
-    return res.status(201).json({ message });
+    return res.status(200).json(message);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.log('[MESSAGES_POST]', error);
+    return res.status(500).json({ message: 'Internal Error' });
   }
 }

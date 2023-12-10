@@ -5,7 +5,7 @@ import { redirectToSignIn } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ChatInput from '@/components/chat/ChatInput';
-import ChatMessages from '@/components/chat/ChatMessages';
+import { ChatMessages } from '@/components/chat/ChatMessages';
 
 interface ChannelPageProps {
   params: {

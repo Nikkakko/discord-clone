@@ -1,8 +1,8 @@
+import qs from 'query-string';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSocket } from '@/Providers/socket-provider';
-import qs from 'query-string';
 
-interface UseChatQueryParams {
+interface ChatQueryProps {
   queryKey: string;
   apiUrl: string;
   paramKey: 'channelId' | 'conversationId';
@@ -14,14 +14,10 @@ export const useChatQuery = ({
   apiUrl,
   paramKey,
   paramValue,
-}: UseChatQueryParams) => {
+}: ChatQueryProps) => {
   const { isConnected } = useSocket();
 
-  const fetchMessages = async ({
-    pageParam = undefined,
-  }: {
-    pageParam: number | undefined;
-  }) => {
+  const fetchMessages = async ({ pageParam = undefined }) => {
     const url = qs.stringifyUrl(
       {
         url: apiUrl,
@@ -42,7 +38,7 @@ export const useChatQuery = ({
       queryKey: [queryKey],
       queryFn: fetchMessages,
       getNextPageParam: lastPage => lastPage?.nextCursor,
-      initialPageParam: 1,
+      initialPageParam: undefined,
       refetchInterval: isConnected ? false : 1000,
     });
 

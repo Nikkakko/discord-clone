@@ -1,7 +1,8 @@
-import { currentProfile } from '@/lib/current-profile';
-import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { Message } from '@prisma/client';
+
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
 
 const MESSAGES_BATCH = 10;
 
@@ -9,20 +10,17 @@ export async function GET(req: Request) {
   try {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
+
     const cursor = searchParams.get('cursor');
+
     const channelId = searchParams.get('channelId');
-    const conversationId = searchParams.get('conversationId');
 
     if (!profile) {
-      return new NextResponse('Unauthorized', {
-        status: 401,
-      });
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    if (!channelId && !conversationId) {
-      return new NextResponse('Bad Request', {
-        status: 400,
-      });
+    if (!channelId) {
+      return new NextResponse('Channel ID missing', { status: 400 });
     }
 
     let messages: Message[] = [];
@@ -35,9 +33,8 @@ export async function GET(req: Request) {
           id: cursor,
         },
         where: {
-          channelId: channelId as string,
+          channelId,
         },
-
         include: {
           member: {
             include: {
@@ -45,7 +42,6 @@ export async function GET(req: Request) {
             },
           },
         },
-
         orderBy: {
           createdAt: 'desc',
         },
@@ -54,9 +50,8 @@ export async function GET(req: Request) {
       messages = await db.message.findMany({
         take: MESSAGES_BATCH,
         where: {
-          channelId: channelId as string,
+          channelId,
         },
-
         include: {
           member: {
             include: {
@@ -64,7 +59,6 @@ export async function GET(req: Request) {
             },
           },
         },
-
         orderBy: {
           createdAt: 'desc',
         },
@@ -72,6 +66,7 @@ export async function GET(req: Request) {
     }
 
     let nextCursor = null;
+
     if (messages.length === MESSAGES_BATCH) {
       nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
@@ -81,10 +76,7 @@ export async function GET(req: Request) {
       nextCursor,
     });
   } catch (error) {
-    console.log('error', error);
-
-    return new NextResponse('Internal Error', {
-      status: 500,
-    });
+    console.log('[MESSAGES_GET]', error);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }
